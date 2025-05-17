@@ -24,12 +24,17 @@ public enum UVFace {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
             var maxZ = Math.max(element.from().z(), element.to().z());
-            var pixel = element.pixel().mul(-1);
-            UVAxis.XY.iterate(element.to(), element.space(), pixel, (x, y) -> face.accept(new UVMappedFace(
-                    this,
-                    new ElementVector(x, y, maxZ),
-                    pixel
-            )));
+            var pixel = element.pixel().mul(1, -1, -1);
+            UVAxis.XY.iterate(
+                    new ElementVector(element.from().x(), element.to().y(), element.to().z()),
+                    element.space(),
+                    pixel,
+                    (x, y) -> face.accept(new UVMappedFace(
+                            this,
+                            new ElementVector(x, y, maxZ),
+                            pixel
+                    ))
+            );
         }
     },
     EAST("east", ElementVector::zy, UVSpace::posZY) {
