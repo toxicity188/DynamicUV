@@ -82,9 +82,9 @@ public enum UVFace {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
             var minY = Math.min(element.from().y(), element.to().y());
-            var pixel = element.pixel().mul(1, 1, -1);
+            var pixel = element.pixel().mul(-1, 1, -1);
             UVAxis.XZ.iterate(
-                    new ElementVector(element.from().x(), element.from().y(), element.to().z()),
+                    new ElementVector(element.to().x(), element.from().y(), element.to().z()),
                     element.space(),
                     pixel,
                     (x, z) -> face.accept(new UVMappedFace(
