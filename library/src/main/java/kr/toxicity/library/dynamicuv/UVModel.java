@@ -31,19 +31,18 @@ public final class UVModel {
     }
 
     public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName) {
-        var index = 0;
         var indexer = new UVIndexer();
         var builderList = new ArrayList<UVByteBuilder>();
         var composite = new JsonArray();
         var nSpace = namespace.get();
         var texture = nSpace.textureAssets(textureName);
         for (UVElement element : elements) {
-            for (UVMappedFace face : element.faces()) {
-                var json = face.asJson(texture);
-                var name = modelName + "_" + index;
-                builderList.add(UVByteBuilder.of(nSpace.model(name), json));
-                composite.add(element.colorType().asJson(nSpace.asset(name), indexer));
-                index++;
+            var modelJson = element.pack(modelName, texture, indexer);
+            for (JsonObject jsonObject : element.asJson(nSpace, indexer, modelJson)) {
+                composite.add(jsonObject);
+            }
+            for (ModelJson json : modelJson) {
+                builderList.add(json.builder(nSpace));
             }
         }
         var model = new JsonObject();

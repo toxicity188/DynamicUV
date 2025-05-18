@@ -496,19 +496,21 @@ public final class TestPlugin extends JavaPlugin {
     private void writeModel(@NotNull UVModel model, @NotNull File dir) {
         model.asJson("one_pixel")
                 .parallelStream()
-                .forEach(builder -> {
-                    var file = new File(dir, builder.path());
-                    var parent = file.getParentFile();
-                    parent.mkdirs();
-                    try(
-                            var output = new FileOutputStream(file);
-                            var buffered = new BufferedOutputStream(output)
-                    ) {
-                        buffered.write(builder.build());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                .forEach(builder -> writeAs(builder, dir));
+    }
+
+    private void writeAs(@NotNull UVByteBuilder builder, @NotNull File dir) {
+        var file = new File(dir, builder.path());
+        var parent = file.getParentFile();
+        parent.mkdirs();
+        try(
+                var output = new FileOutputStream(file);
+                var buffered = new BufferedOutputStream(output)
+        ) {
+            buffered.write(builder.build());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -529,6 +531,7 @@ public final class TestPlugin extends JavaPlugin {
         writeModel(LEFT_FOREARM, dir);
         writeModel(RIGHT_ARM, dir);
         writeModel(RIGHT_FOREARM, dir);
+        writeAs(UVByteBuilder.emptyImage(UV_NAMESPACE, "one_pixel"), dir);
         try (
                 var stream = Objects.requireNonNull(getResource("test_skin.png"));
                 var buffered = new BufferedInputStream(stream)

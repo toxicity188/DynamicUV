@@ -86,32 +86,42 @@ public final class UVElement {
         obj.add("textures", textures);
         var elements = new JsonArray();
         for (UVMappedFace face : faces) {
-            elements.add(face.asJson());
+            elements.add(face.asJson(0));
         }
         obj.add("elements", elements);
         return obj;
+    }
+
+    public @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
+        return colorType.asJson(namespace, indexer, modelJsons);
+    }
+
+    public @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer) {
+        return colorType.pack(modelName, textureName, indexer, faces);
     }
 
     public enum ColorType {
         RGB {
             @Override
             public void write(UVModelData.@NotNull Builder builder, int value) {
-                builder.colors().add(UVColorUtil.rgb(value));
+                builder.colors().add(UVUtil.rgb(value));
             }
 
             @Override
-            public JsonObject asJson(@NotNull String model, @NotNull UVIndexer indexer) {
-                var obj = new JsonObject();
-                obj.addProperty("type", "model");
-                obj.addProperty("model", model);
-                var tints = new JsonArray(1);
-                var tint = new JsonObject();
-                tint.addProperty("type", "minecraft:custom_model_data");
-                tint.addProperty("index", indexer.color());
-                tint.addProperty("default", 0);
-                tints.add(tint);
-                obj.add("tints", tints);
-                return obj;
+            public @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
+                var array = new JsonArray(faces.size());
+                var i = 0;
+                for (UVMappedFace face : faces) {
+                    array.add(face.asJson(i++));
+                }
+                return Collections.singletonList(new ModelJson(modelName + "_" + indexer.model(), UVUtil.packModel(textureName, array), faces.size()));
+            }
+
+            @Override
+            public @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
+                return modelJsons.stream()
+                        .map(json -> UVUtil.model(namespace, json.name(), indexer, json.elements()))
+                        .toList();
             }
         },
         ARGB {
@@ -123,24 +133,36 @@ public final class UVElement {
 
             @Override
             public void write(UVModelData.@NotNull Builder builder, int value) {
-                builder.colors().add(UVColorUtil.rgb(value));
-                builder.flags().add(UVColorUtil.alpha(value));
+                builder.colors().add(UVUtil.rgb(value));
+                builder.flags().add(UVUtil.alpha(value));
             }
 
             @Override
-            public JsonObject asJson(@NotNull String model, @NotNull UVIndexer indexer) {
-                var rgb = RGB.asJson(model, indexer);
-                var obj = new JsonObject();
-                obj.addProperty("type", "minecraft:condition");
-                obj.addProperty("property", "minecraft:custom_model_data");
-                obj.addProperty("index", indexer.flag());
-                obj.add("on_true", rgb);
-                obj.add("on_false", EMPTY);
-                return obj;
+            public @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
+                return modelJsons.stream()
+                        .map(json -> UVUtil.model(namespace, json.name(), indexer, json.elements()))
+                        .map(rgb -> {
+                            var obj = new JsonObject();
+                            obj.addProperty("type", "minecraft:condition");
+                            obj.addProperty("property", "minecraft:custom_model_data");
+                            obj.addProperty("index", indexer.flag());
+                            obj.add("on_true", rgb);
+                            obj.add("on_false", EMPTY);
+                            return obj;
+                        })
+                        .toList();
+            }
+
+            @Override
+            public @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
+                return faces.stream()
+                        .map(face -> new ModelJson(modelName + "_" + indexer.model(), face.asJson(textureName), 1))
+                        .toList();
             }
         }
         ;
         public abstract void write(@NotNull UVModelData.Builder builder, int value);
-        public abstract JsonObject asJson(@NotNull String model, @NotNull UVIndexer indexer);
+        public abstract @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons);
+        public abstract @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces);
     }
 }

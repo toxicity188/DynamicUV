@@ -21,7 +21,7 @@ public interface UVByteBuilder {
     byte[] build();
 
     static @NotNull UVByteBuilder emptyImage(@NotNull UVNamespace namespace, @NotNull String textureName) {
-        return of(namespace.texture(textureName), UVColorUtil.EMPTY_IMAGE);
+        return of(namespace.texture(textureName), UVUtil.EMPTY_IMAGE);
     }
 
     static @NotNull UVByteBuilder of(@NotNull String path, @NotNull JsonElement element) {

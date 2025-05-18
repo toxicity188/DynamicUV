@@ -18,7 +18,7 @@ public record UVMappedFace(
         MAX_UV.add(16);
     }
 
-    public @NotNull JsonObject asJson() {
+    public @NotNull JsonObject asJson(int index) {
         var next = position.plus(face.mapVector(pixel));
 
         var obj = new JsonObject();
@@ -27,7 +27,7 @@ public record UVMappedFace(
         var faces = new JsonObject();
         var uv = new JsonObject();
         uv.add("uv", MAX_UV);
-        uv.addProperty("tintindex", 0);
+        uv.addProperty("tintindex", index);
         uv.addProperty("texture", "#0");
         faces.add(face.uvName(), uv);
         obj.add("faces", faces);
@@ -35,14 +35,8 @@ public record UVMappedFace(
     }
 
     public @NotNull JsonObject asJson(@NotNull String textureName) {
-        var obj = new JsonObject();
-        var textures = new JsonObject();
-        textures.addProperty("0", textureName);
-        textures.addProperty("particle", textureName);
-        obj.add("textures", textures);
         var elements = new JsonArray(1);
-        elements.add(asJson());
-        obj.add("elements", elements);
-        return obj;
+        elements.add(asJson(0));
+        return UVUtil.packModel(textureName, elements);
     }
 }
