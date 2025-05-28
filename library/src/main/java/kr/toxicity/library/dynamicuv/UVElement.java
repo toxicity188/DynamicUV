@@ -5,10 +5,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class UVElement {
     private final Map<UVFace, UVPos> mappingPos;
@@ -29,15 +26,14 @@ public final class UVElement {
     ) {
         var center = scale.toModelLocation();
         this.space = space;
-        this.mappingPos = mappingPos;
+        this.mappingPos = new EnumMap<>(mappingPos);
         this.colorType = colorType;
         var centerPos = position.toModelLocation().plus(ElementVector.CENTER);
         from = center.div(-2).plus(centerPos);
         to = center.div(2).plus(centerPos);
         pixel = center.div(space.x(), space.y(), space.z());
         var list = new ArrayList<UVMappedFace>();
-        for (UVFace value : UVFace.values()) {
-            if (!mappingPos.containsKey(value)) continue;
+        for (UVFace value : this.mappingPos.keySet()) {
             value.iterate(
                     this,
                     list::add
@@ -71,10 +67,8 @@ public final class UVElement {
 
 
     public void write(@NotNull UVModelData.Builder builder, @NotNull BufferedImage image) {
-        for (UVFace value : UVFace.values()) {
-            var startPos = mappingPos.get(value);
-            if (startPos == null) continue;
-            startPos.iterate(value.posOf(space), (x, z) -> colorType.write(builder, x < image.getWidth() && z < image.getHeight() ? image.getRGB(x, z) : 0));
+        for (Map.Entry<UVFace, UVPos> entry : mappingPos.entrySet()) {
+            entry.getValue().iterate(entry.getKey().posOf(space), (x, z) -> colorType.write(builder, x < image.getWidth() && z < image.getHeight() ? image.getRGB(x, z) : 0));
         }
     }
 

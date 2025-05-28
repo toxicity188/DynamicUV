@@ -29,7 +29,7 @@ public record ElementVector(float x, float y, float z) {
         return plus(vector.x, vector.y, vector.z);
     }
     public @NotNull ElementVector minus(float x, float y, float z) {
-        return new ElementVector(this.x + x, this.y + y, this.z + z);
+        return new ElementVector(this.x - x, this.y - y, this.z - z);
     }
     public @NotNull ElementVector minus(@NotNull ElementVector vector) {
         return minus(vector.x, vector.y, vector.z);
