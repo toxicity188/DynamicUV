@@ -10,7 +10,11 @@ public final class UVUtil {
     public static final BufferedImage EMPTY_IMAGE = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
 
     static {
-        EMPTY_IMAGE.setRGB(0, 0, 0xFFFFFF);
+        for (int w = 0; w < 16; w++) {
+            for (int h = 0; h < 16; h++) {
+                EMPTY_IMAGE.setRGB(w, h, 0xFFFFFF);
+            }
+        }
     }
 
     private UVUtil() {
