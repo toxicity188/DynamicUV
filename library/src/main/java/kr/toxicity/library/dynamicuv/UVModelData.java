@@ -2,13 +2,13 @@ package kr.toxicity.library.dynamicuv;
 
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import it.unimi.dsi.fastutil.booleans.BooleanImmutableList;
+import it.unimi.dsi.fastutil.booleans.BooleanList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntImmutableList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public record UVModelData(@NotNull List<Boolean> flags, @NotNull List<Integer> colors) {
+public record UVModelData(@NotNull BooleanList flags, @NotNull IntList colors) {
 
     public static @NotNull Builder builder() {
         return new Builder();

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.image.BufferedImage;
 
 public final class UVUtil {
-    public static final BufferedImage EMPTY_IMAGE = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+    public static final BufferedImage EMPTY_IMAGE = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
 
     static {
         EMPTY_IMAGE.setRGB(0, 0, 0xFFFFFF);

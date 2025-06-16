@@ -6,7 +6,7 @@ allprojects {
     apply(plugin = "java")
 
     group = "kr.toxicity.library.dynamicuv"
-    version = "1.0"
+    version = "1.0.3"
 
     repositories {
         mavenCentral()
