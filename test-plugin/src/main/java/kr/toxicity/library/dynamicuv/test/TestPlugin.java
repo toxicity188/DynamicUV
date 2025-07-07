@@ -24,6 +24,8 @@ import java.util.*;
 
 public final class TestPlugin extends JavaPlugin {
 
+    private static final float DIV_FACTOR = 16 / 0.9375F;
+
     private static final UVNamespace UV_NAMESPACE = new UVNamespace(
             "uv_test",
             "player_limb"
@@ -33,7 +35,7 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "head"
     ).addElement(new UVElement(
-            new ElementVector(0.5F, 0.5F, 0.5F),
+            new ElementVector(8F, 8F, 8F).div(DIV_FACTOR),
             new ElementVector(0, 0.25F, 0),
             new UVSpace(8, 8, 8),
             UVElement.ColorType.RGB,
@@ -63,8 +65,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "chest"
     ).addElement(new UVElement(
-            new ElementVector(8, 4, 4).div(16),
-            new ElementVector(0, 2, 0).div(16),
+            new ElementVector(8, 4, 4).div(DIV_FACTOR),
+            new ElementVector(0, 2, 0).div(DIV_FACTOR),
             new UVSpace(8, 4, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -75,8 +77,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(20, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(8, 4, 4).div(16).inflate(0.25F),
-            new ElementVector(0, 2, 0).div(16),
+            new ElementVector(8, 4, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(0, 2, 0).div(DIV_FACTOR),
             new UVSpace(8, 4, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -91,8 +93,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "waist"
     ).addElement(new UVElement(
-            new ElementVector(8, 4, 4).div(16),
-            new ElementVector(0, 2, 0).div(16),
+            new ElementVector(8, 4, 4).div(DIV_FACTOR),
+            new ElementVector(0, 2, 0).div(DIV_FACTOR),
             new UVSpace(8, 4, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -102,8 +104,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.WEST, new UVPos(28, 24))
             )
     )).addElement(new UVElement(
-            new ElementVector(8, 4, 4).div(16).inflate(0.25F),
-            new ElementVector(0, 2, 0).div(16),
+            new ElementVector(8, 4, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(0, 2, 0).div(DIV_FACTOR),
             new UVSpace(8, 4, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -117,8 +119,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "hip"
     ).addElement(new UVElement(
-            new ElementVector(8, 4, 4).div(16),
-            new ElementVector(0, 2, 0).div(16),
+            new ElementVector(8, 4, 4).div(DIV_FACTOR),
+            new ElementVector(0, 2, 0).div(DIV_FACTOR),
             new UVSpace(8, 4, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -129,8 +131,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(28, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(8, 4, 4).div(16).inflate(0.25F),
-            new ElementVector(0, 2, 0).div(16),
+            new ElementVector(8, 4, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(0, 2, 0).div(DIV_FACTOR),
             new UVSpace(8, 4, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -145,8 +147,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "left_leg"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -157,8 +159,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(20, 48))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -173,8 +175,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "left_foreleg"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -185,8 +187,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(24, 48))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -201,8 +203,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "right_leg"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -213,8 +215,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(4, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -229,8 +231,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "right_foreleg"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -241,8 +243,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(8, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -257,8 +259,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "left_arm"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -269,8 +271,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(36, 48))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -285,8 +287,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "left_forearm"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -297,8 +299,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(40, 48))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(-2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(-2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -313,8 +315,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "right_arm"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -325,8 +327,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(44, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -341,8 +343,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "right_forearm"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -353,8 +355,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(48, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(2, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(2, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -369,8 +371,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "left_slim_arm"
     ).addElement(new UVElement(
-            new ElementVector(3, 6, 4).div(16),
-            new ElementVector(-1.5F, -3, 0).div(16),
+            new ElementVector(3, 6, 4).div(DIV_FACTOR),
+            new ElementVector(-1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(3, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -381,8 +383,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(36, 48))
             )
     )).addElement(new UVElement(
-            new ElementVector(3, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(-1.5F, -3, 0).div(16),
+            new ElementVector(3, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(-1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(3, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -397,8 +399,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "left_slim_forearm"
     ).addElement(new UVElement(
-            new ElementVector(3, 6, 4).div(16),
-            new ElementVector(-1.5F, -3, 0).div(16),
+            new ElementVector(3, 6, 4).div(DIV_FACTOR),
+            new ElementVector(-1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(3, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -409,8 +411,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(39, 48))
             )
     )).addElement(new UVElement(
-            new ElementVector(3, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(-1.5F, -3, 0).div(16),
+            new ElementVector(3, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(-1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(3, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -425,8 +427,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "right_slim_arm"
     ).addElement(new UVElement(
-            new ElementVector(3, 6, 4).div(16),
-            new ElementVector(1.5F, -3, 0).div(16),
+            new ElementVector(3, 6, 4).div(DIV_FACTOR),
+            new ElementVector(1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(3, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -437,8 +439,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.UP, new UVPos(44, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(3, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(1.5F, -3, 0).div(16),
+            new ElementVector(3, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(3, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
@@ -453,8 +455,8 @@ public final class TestPlugin extends JavaPlugin {
             UV_NAMESPACE,
             "right_slim_forearm"
     ).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16),
-            new ElementVector(1.5F, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR),
+            new ElementVector(1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -465,8 +467,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(47, 16))
             )
     )).addElement(new UVElement(
-            new ElementVector(4, 6, 4).div(16).inflate(0.25F),
-            new ElementVector(1.5F, -3, 0).div(16),
+            new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
+            new ElementVector(1.5F, -3, 0).div(DIV_FACTOR),
             new UVSpace(4, 6, 4),
             UVElement.ColorType.ARGB,
             Map.ofEntries(
