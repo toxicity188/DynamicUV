@@ -2,10 +2,10 @@ plugins {
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.3.0"
-    id("io.github.goooler.shadow") version "8.1.8"
+    id("com.gradleup.shadow") version "9.0.0-rc3"
 }
 
-val testVersion = "1.21.7"
+val testVersion = "1.21.8"
 
 dependencies {
     paperweight.paperDevBundle("$testVersion-R0.1-SNAPSHOT")

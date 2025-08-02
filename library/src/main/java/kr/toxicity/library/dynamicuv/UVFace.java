@@ -13,11 +13,16 @@ public enum UVFace {
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
             var minZ = Math.min(element.from().z(), element.to().z());
             var pixel = element.pixel().mul(-1);
-            UVAxis.XY.iterate(element.to(), element.space(), pixel, (x, y) -> face.accept(new UVMappedFace(
-                    this,
-                    new ElementVector(x, y, minZ),
-                    pixel
-            )));
+            UVAxis.XY.iterate(
+                    element.to(),
+                    element.space(),
+                    pixel,
+                    (x, y) -> face.accept(new UVMappedFace(
+                            this,
+                            new ElementVector(x, y, minZ),
+                            pixel
+                    ))
+            );
         }
     },
     SOUTH("south", ElementVector::xy, UVSpace::posXY) {
@@ -42,11 +47,16 @@ public enum UVFace {
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
             var maxX = Math.max(element.from().x(), element.to().x());
             var pixel = element.pixel().mul(-1);
-            UVAxis.ZY.iterate(element.to(), element.space(), pixel, (z, y) -> face.accept(new UVMappedFace(
-                    this,
-                    new ElementVector(maxX, y, z),
-                    pixel
-            )));
+            UVAxis.ZY.iterate(
+                    element.to(),
+                    element.space(),
+                    pixel,
+                    (z, y) -> face.accept(new UVMappedFace(
+                            this,
+                            new ElementVector(maxX, y, z),
+                            pixel
+                    ))
+            );
         }
     },
     WEST("west", ElementVector::zy, UVSpace::posZY) {
@@ -71,11 +81,16 @@ public enum UVFace {
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
             var maxY = Math.max(element.from().y(), element.to().y());
             var pixel = element.pixel().mul(-1);
-            UVAxis.XZ.iterate(element.to(), element.space(), pixel, (x, z) -> face.accept(new UVMappedFace(
-                    this,
-                    new ElementVector(x, maxY, z),
-                    pixel
-            )));
+            UVAxis.XZ.iterate(
+                    element.to(),
+                    element.space(),
+                    pixel,
+                    (x, z) -> face.accept(new UVMappedFace(
+                                    this,
+                                    new ElementVector(x, maxY, z),
+                                    pixel
+                            )
+                    ));
         }
     },
     DOWN("down", ElementVector::xz, UVSpace::posXZ) {
