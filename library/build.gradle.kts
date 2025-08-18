@@ -1,5 +1,21 @@
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
 plugins {
-    `maven-publish`
+    id("com.vanniktech.maven.publish") version "0.34.0"
+    signing
+}
+
+val artifactBaseId = rootProject.name.lowercase()
+val artifactVersion = project.version.toString().substringBeforeLast('-')
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+signing {
+    useGpgCmd()
 }
 
 dependencies {
@@ -25,15 +41,36 @@ tasks {
     }
 }
 
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
+mavenPublishing  {
+    publishToMavenCentral()
+    signAllPublications()
+    coordinates("io.github.toxicity188", artifactBaseId, artifactVersion)
+    configure(JavaLibrary(
+        javadocJar = JavadocJar.None(),
+        sourcesJar = true,
+    ))
+    pom {
+        name = artifactBaseId
+        description = "A simple library for Minecraft Java Edition models with in-game configurable textures."
+        inceptionYear = "2025"
+        url = "https://github.com/toxicity188/DynamicUV/"
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://mit-license.org/"
+            }
+        }
+        developers {
+            developer {
+                id = "toxicity188"
+                name = "toxicity188"
+                url = "https://github.com/toxicity188/"
+            }
+        }
+        scm {
+            url = "https://github.com/toxicity188/DynamicUV/"
+            connection = "scm:git:git://github.com/toxicity188/DynamicUV.git"
+            developerConnection = "scm:git:ssh://git@github.com/toxicity188/DynamicUV.git"
         }
     }
 }

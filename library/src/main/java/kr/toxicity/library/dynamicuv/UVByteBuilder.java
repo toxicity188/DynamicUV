@@ -19,19 +19,18 @@ public interface UVByteBuilder {
 
     @NotNull String path();
     byte[] build();
-    int estimatedSize();
+    long estimatedSize();
 
     static @NotNull UVByteBuilder emptyImage(@NotNull UVNamespace namespace, @NotNull String textureName) {
         return of(namespace.texture(textureName), UVUtil.EMPTY_IMAGE);
     }
 
     static @NotNull UVByteBuilder of(@NotNull String path, @NotNull JsonElement element) {
-        var gson = GSON.toJson(element);
-        return of(path, gson.length() * 4, () -> gson.getBytes(StandardCharsets.UTF_8));
+        return of(path, UVUtil.estimateSize(element), () -> GSON.toJson(element).getBytes(StandardCharsets.UTF_8));
     }
 
     static @NotNull UVByteBuilder of(@NotNull String path, @NotNull BufferedImage image) {
-        return of(path, image.getHeight() * image.getWidth() * 4, () -> {
+        return of(path, 4L * image.getHeight() * image.getWidth(), () -> {
             try (
                     var bytes = new ByteArrayOutputStream()
             ) {
@@ -43,7 +42,7 @@ public interface UVByteBuilder {
         });
     }
 
-    static @NotNull UVByteBuilder of(@NotNull String path, int estimatedSize, @NotNull Supplier<byte[]> supplier) {
+    static @NotNull UVByteBuilder of(@NotNull String path, long estimatedSize, @NotNull Supplier<byte[]> supplier) {
         return new UVByteBuilder() {
             @Override
             public @NotNull String path() {
@@ -56,7 +55,7 @@ public interface UVByteBuilder {
             }
 
             @Override
-            public int estimatedSize() {
+            public long estimatedSize() {
                 return estimatedSize;
             }
         };
