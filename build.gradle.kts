@@ -1,11 +1,9 @@
 plugins {
     id("java")
-    `maven-publish`
 }
 
 allprojects {
     apply(plugin = "java")
-    apply(plugin = "maven-publish")
 
     group = "kr.toxicity.library.dynamicuv"
     version = "1.0.4"
