@@ -1,9 +1,11 @@
 plugins {
     id("java")
+    `maven-publish`
 }
 
 allprojects {
     apply(plugin = "java")
+    apply(plugin = "maven-publish")
 
     group = "kr.toxicity.library.dynamicuv"
     version = "1.0.4"
@@ -19,8 +21,9 @@ allprojects {
         testCompileOnly("org.projectlombok:lombok:1.18.38")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 
-        testImplementation(platform("org.junit:junit-bom:5.10.0"))
+        testImplementation(platform("org.junit:junit-bom:5.13.4"))
         testImplementation("org.junit.jupiter:junit-jupiter")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 
     tasks {
