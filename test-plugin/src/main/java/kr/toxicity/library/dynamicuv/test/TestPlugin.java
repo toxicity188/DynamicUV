@@ -36,7 +36,7 @@ public final class TestPlugin extends JavaPlugin {
             "head"
     ).addElement(new UVElement(
             new ElementVector(8F, 8F, 8F).div(DIV_FACTOR),
-            new ElementVector(0, 0.25F, 0),
+            new ElementVector(0, 4F, 0).div(DIV_FACTOR),
             new UVSpace(8, 8, 8),
             UVElement.ColorType.RGB,
             Map.ofEntries(
@@ -48,8 +48,8 @@ public final class TestPlugin extends JavaPlugin {
                     Map.entry(UVFace.DOWN, new UVPos(16, 0))
             )
     )).addElement(new UVElement(
-            new ElementVector(0.5F, 0.5F, 0.5F).inflate(0.5F),
-            new ElementVector(0, 0.25F, 0),
+            new ElementVector(8F, 8F, 8F).div(DIV_FACTOR).inflate(0.5F),
+            new ElementVector(0, 4F, 0).div(DIV_FACTOR),
             new UVSpace(8, 8, 8),
             UVElement.ColorType.ARGB,
             Map.ofEntries(

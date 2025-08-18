@@ -69,9 +69,9 @@ public enum UVFace {
                     element.space(),
                     pixel,
                     (z, y) -> face.accept(new UVMappedFace(
-                        this,
-                        new ElementVector(minX, y, z),
-                        pixel
+                            this,
+                            new ElementVector(minX, y, z),
+                            pixel
                     ))
             );
         }
