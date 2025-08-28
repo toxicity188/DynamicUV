@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public interface UVByteBuilder {
@@ -26,11 +27,11 @@ public interface UVByteBuilder {
     }
 
     static @NotNull UVByteBuilder of(@NotNull String path, @NotNull JsonElement element) {
-        return of(path, UVUtil.estimateSize(element), () -> GSON.toJson(element).getBytes(StandardCharsets.UTF_8));
+        return of(path, () -> UVUtil.estimateSize(element), () -> GSON.toJson(element).getBytes(StandardCharsets.UTF_8));
     }
 
     static @NotNull UVByteBuilder of(@NotNull String path, @NotNull BufferedImage image) {
-        return of(path, 4L * image.getHeight() * image.getWidth(), () -> {
+        return of(path, () -> 4L * image.getHeight() * image.getWidth(), () -> {
             try (
                     var bytes = new ByteArrayOutputStream()
             ) {
@@ -42,7 +43,7 @@ public interface UVByteBuilder {
         });
     }
 
-    static @NotNull UVByteBuilder of(@NotNull String path, long estimatedSize, @NotNull Supplier<byte[]> supplier) {
+    static @NotNull UVByteBuilder of(@NotNull String path, @NotNull LongSupplier estimatedSize, @NotNull Supplier<byte[]> supplier) {
         return new UVByteBuilder() {
             @Override
             public @NotNull String path() {
@@ -56,7 +57,7 @@ public interface UVByteBuilder {
 
             @Override
             public long estimatedSize() {
-                return estimatedSize;
+                return estimatedSize.getAsLong();
             }
         };
     }

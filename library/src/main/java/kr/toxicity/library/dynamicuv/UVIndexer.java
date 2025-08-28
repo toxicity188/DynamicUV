@@ -1,6 +1,6 @@
 package kr.toxicity.library.dynamicuv;
 
-public class UVIndexer {
+public final class UVIndexer {
     private int model;
     private int color;
     private int flag;

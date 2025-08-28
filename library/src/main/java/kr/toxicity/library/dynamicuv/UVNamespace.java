@@ -2,7 +2,7 @@ package kr.toxicity.library.dynamicuv;
 
 import org.jetbrains.annotations.NotNull;
 
-public class UVNamespace {
+public final class UVNamespace {
 
     private final String namespace;
     private final String directory;
