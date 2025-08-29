@@ -5,6 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 public record ModelJson(@NotNull String name, @NotNull JsonObject jsonObject, int elements) {
     public @NotNull UVByteBuilder builder(@NotNull UVNamespace namespace) {
-        return UVByteBuilder.of(namespace.model(name), jsonObject);
+        return UVByteBuilder.of(namespace.model(name), estimatedSize(), jsonObject);
+    }
+
+    public long estimatedSize() {
+        return 256L * elements;
     }
 }

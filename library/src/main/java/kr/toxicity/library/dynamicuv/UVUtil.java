@@ -1,6 +1,7 @@
 package kr.toxicity.library.dynamicuv;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
@@ -26,34 +27,6 @@ public final class UVUtil {
 
     public static boolean alpha(int value) {
         return ((value >> 24) & 0xFF) > 0;
-    }
-
-    public static long estimateSize(@NotNull JsonElement element) {
-        switch (element) {
-            case JsonObject object -> {
-                return object.entrySet()
-                        .stream()
-                        .mapToLong(entry -> estimateSize(entry.getValue()))
-                        .sum();
-            }
-            case JsonArray array -> {
-                return array.asList()
-                        .stream()
-                        .mapToLong(UVUtil::estimateSize)
-                        .sum();
-            }
-            case JsonNull ignored -> {
-                return 8L;
-            }
-            case JsonPrimitive primitive -> {
-                if (primitive.isNumber()) return primitive.getAsInt() % 10 * 2L;
-                if (primitive.isBoolean()) return primitive.getAsBoolean() ? 8L : 10L;
-                if (primitive.isString()) return 2L * primitive.getAsString().length();
-
-            }
-            default -> {}
-        }
-        return 0L;
     }
 
     public static @NotNull JsonObject packModel(@NotNull String textureName, @NotNull JsonArray elements) {

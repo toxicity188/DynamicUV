@@ -50,7 +50,7 @@ public final class UVModel {
         model.add("models", composite);
         var obj = new JsonObject();
         obj.add("model", model);
-        builderList.add(UVByteBuilder.of(nSpace.item(modelName), obj));
+        builderList.add(UVByteBuilder.of(nSpace.item(modelName), builderList.stream().mapToLong(UVByteBuilder::estimatedSize).sum(), obj));
         return builderList;
     }
 
