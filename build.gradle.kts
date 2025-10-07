@@ -6,18 +6,18 @@ allprojects {
     apply(plugin = "java")
 
     group = "kr.toxicity.library.dynamicuv"
-    version = "1.0.7"
+    version = "1.0.8"
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        compileOnly("org.projectlombok:lombok:1.18.38")
-        annotationProcessor("org.projectlombok:lombok:1.18.38")
+        compileOnly("org.projectlombok:lombok:1.18.42")
+        annotationProcessor("org.projectlombok:lombok:1.18.42")
 
-        testCompileOnly("org.projectlombok:lombok:1.18.38")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+        testCompileOnly("org.projectlombok:lombok:1.18.42")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
     }
 
     tasks {

@@ -90,8 +90,8 @@ public final class UVElement {
         return colorType.asJson(namespace, indexer, modelJsons);
     }
 
-    @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer) {
-        return colorType.pack(modelName, textureName, indexer, faces);
+    @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull String textureName, @NotNull UVIndexer indexer) {
+        return colorType.pack(indexFunction, textureName, indexer, faces);
     }
 
     public enum ColorType {
@@ -102,13 +102,13 @@ public final class UVElement {
             }
 
             @Override
-            @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
+            @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
                 var array = new JsonArray(faces.size());
                 var i = 0;
                 for (UVMappedFace face : faces) {
                     array.add(face.asJson(i++));
                 }
-                return Collections.singletonList(new ModelJson(modelName + "_" + indexer.model(), UVUtil.packModel(textureName, array), faces.size()));
+                return Collections.singletonList(new ModelJson(indexFunction.indexing(indexer.model()), UVUtil.packModel(textureName, array), faces.size()));
             }
 
             @Override
@@ -148,15 +148,15 @@ public final class UVElement {
             }
 
             @Override
-            @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
+            @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
                 return faces.stream()
-                        .map(face -> new ModelJson(modelName + "_" + indexer.model(), face.asJson(textureName), 1))
+                        .map(face -> new ModelJson(indexFunction.indexing(indexer.model()), face.asJson(textureName), 1))
                         .toList();
             }
         }
         ;
         abstract void write(@NotNull UVModelData.Builder builder, int value);
         abstract @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons);
-        abstract @NotNull List<ModelJson> pack(@NotNull String modelName, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces);
+        abstract @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces);
     }
 }

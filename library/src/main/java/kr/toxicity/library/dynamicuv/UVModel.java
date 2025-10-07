@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public final class UVModel {
     private final @NotNull Supplier<UVNamespace> namespace;
     private final @NotNull String modelName;
     private final List<UVElement> elements = new ArrayList<>();
+    private @Nullable String packName;
 
     public UVModel(@NotNull UVNamespace namespace, @NotNull String modelName) {
         this(() -> namespace, modelName);
@@ -27,17 +29,33 @@ public final class UVModel {
     }
 
     public @NotNull String itemModelNamespace() {
-        return namespace.get().asset(modelName);
+        return namespace.get().asset(packName());
+    }
+
+    public @NotNull String modelName() {
+        return modelName;
+    }
+
+    public @NotNull String packName() {
+        return packName != null ? packName : modelName;
+    }
+
+    public void packName(@Nullable String packName) {
+        this.packName = packName;
     }
 
     public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName) {
+        return asJson(textureName, i -> modelName + "_" + i);
+    }
+
+    public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName, @NotNull UVIndexFunction indexFunction) {
         var indexer = new UVIndexer();
         var builderList = new ArrayList<UVByteBuilder>();
         var composite = new JsonArray();
         var nSpace = namespace.get();
         var texture = nSpace.textureAssets(textureName);
         for (UVElement element : elements) {
-            var modelJson = element.pack(modelName, texture, indexer);
+            var modelJson = element.pack(indexFunction, texture, indexer);
             for (JsonObject jsonObject : element.asJson(nSpace, indexer, modelJson)) {
                 composite.add(jsonObject);
             }
@@ -50,7 +68,7 @@ public final class UVModel {
         model.add("models", composite);
         var obj = new JsonObject();
         obj.add("model", model);
-        builderList.add(UVByteBuilder.of(nSpace.item(modelName), builderList.stream().mapToLong(UVByteBuilder::estimatedSize).sum(), obj));
+        builderList.add(UVByteBuilder.of(nSpace.item(packName()), builderList.stream().mapToLong(UVByteBuilder::estimatedSize).sum(), obj));
         return builderList;
     }
 

@@ -21,8 +21,8 @@ signing {
 dependencies {
     implementation("org.jetbrains:annotations:26.0.2")
     listOf(
-        "com.google.code.gson:gson:2.13.1",
-        "it.unimi.dsi:fastutil:8.5.16"
+        "com.google.code.gson:gson:2.13.2",
+        "it.unimi.dsi:fastutil:8.5.18"
     ).forEach {
         compileOnly(it)
         testImplementation(it)
