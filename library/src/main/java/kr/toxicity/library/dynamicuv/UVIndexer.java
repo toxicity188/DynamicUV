@@ -14,4 +14,22 @@ public final class UVIndexer {
     public int flag() {
         return flag++;
     }
+
+    public int shiftModel(int shift) {
+        var value = model;
+        model += shift;
+        return value;
+    }
+
+    public int shiftColor(int shift) {
+        var value = color;
+        color += shift;
+        return value;
+    }
+
+    public int shiftFlag(int shift) {
+        var value = flag;
+        flag += shift;
+        return value;
+    }
 }

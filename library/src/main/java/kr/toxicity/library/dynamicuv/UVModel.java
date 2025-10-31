@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
@@ -49,13 +50,17 @@ public final class UVModel {
     }
 
     public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName, @NotNull UVIndexFunction indexFunction) {
+        return asJson(textureName, new UVLoadContext(indexFunction, ((indexer, namespace1, jsonArray) -> {})));
+    }
+    public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName, @NotNull UVLoadContext context) {
         var indexer = new UVIndexer();
         var builderList = new ArrayList<UVByteBuilder>();
         var composite = new JsonArray();
         var nSpace = namespace.get();
+        context.buildFunction().build(indexer, nSpace, composite);
         var texture = nSpace.textureAssets(textureName);
         for (UVElement element : elements) {
-            var modelJson = element.pack(indexFunction, texture, indexer);
+            var modelJson = element.pack(context.indexFunction(), texture, indexer);
             for (JsonObject jsonObject : element.asJson(nSpace, indexer, modelJson)) {
                 composite.add(jsonObject);
             }
@@ -73,7 +78,12 @@ public final class UVModel {
     }
 
     public @NotNull UVModelData write(@NotNull BufferedImage image) {
+        return write(image, builder -> {});
+    }
+
+    public @NotNull UVModelData write(@NotNull BufferedImage image, @NotNull Consumer<UVModelData.Builder> consumer) {
         var builder = UVModelData.builder();
+        consumer.accept(builder);
         for (UVElement element : elements) {
             element.write(builder, image);
         }
