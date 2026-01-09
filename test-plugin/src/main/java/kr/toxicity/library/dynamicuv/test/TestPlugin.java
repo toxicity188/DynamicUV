@@ -2,7 +2,7 @@ package kr.toxicity.library.dynamicuv.test;
 
 import kr.toxicity.library.dynamicuv.*;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomModelData;
@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,7 +50,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(8F, 8F, 8F).div(DIV_FACTOR).inflate(0.5F),
         new ElementVector(0, 4F, 0).div(DIV_FACTOR),
         new UVSpace(8, 8, 8),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(8 + 32, 8)),
             Map.entry(UVFace.SOUTH, new UVPos(24 + 32, 8)),
@@ -80,7 +79,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(8, 4, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(0, 2, 0).div(DIV_FACTOR),
         new UVSpace(8, 4, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(20, 20 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(32, 20 + 16)),
@@ -107,7 +106,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(8, 4, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(0, 2, 0).div(DIV_FACTOR),
         new UVSpace(8, 4, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(20, 24 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(32, 24 + 16)),
@@ -134,7 +133,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(8, 4, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(0, 2, 0).div(DIV_FACTOR),
         new UVSpace(8, 4, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(20, 28 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(32, 28 + 16)),
@@ -162,7 +161,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(-2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(20 - 16, 52)),
             Map.entry(UVFace.SOUTH, new UVPos(28 - 16, 52)),
@@ -190,7 +189,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(-2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(20 - 16, 58)),
             Map.entry(UVFace.SOUTH, new UVPos(28 - 16, 58)),
@@ -218,7 +217,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(4, 20 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(12, 20 + 16)),
@@ -246,7 +245,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(4, 26 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(12, 26 + 16)),
@@ -274,7 +273,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(-2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(36 + 16, 52)),
             Map.entry(UVFace.SOUTH, new UVPos(44 + 16, 52)),
@@ -302,7 +301,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(-2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(36 + 16, 58)),
             Map.entry(UVFace.SOUTH, new UVPos(44 + 16, 58)),
@@ -330,7 +329,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(44, 20 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(52, 20 + 16)),
@@ -358,7 +357,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(2, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(44, 26 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(52, 26 + 16)),
@@ -386,7 +385,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(3, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(-1.5F, -3, 0).div(DIV_FACTOR),
         new UVSpace(3, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(36 + 16, 52)),
             Map.entry(UVFace.SOUTH, new UVPos(43 + 16, 52)),
@@ -414,7 +413,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(3, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(-1.5F, -3, 0).div(DIV_FACTOR),
         new UVSpace(3, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(36 + 16, 58)),
             Map.entry(UVFace.SOUTH, new UVPos(43 + 16, 58)),
@@ -442,7 +441,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(3, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(1.5F, -3, 0).div(DIV_FACTOR),
         new UVSpace(3, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(44, 20 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(51, 20 + 16)),
@@ -470,7 +469,7 @@ public final class TestPlugin extends JavaPlugin {
         new ElementVector(4, 6, 4).div(DIV_FACTOR).inflate(0.25F),
         new ElementVector(1.5F, -3, 0).div(DIV_FACTOR),
         new UVSpace(4, 6, 4),
-        UVElement.ColorType.ARGB,
+        UVElement.ColorType.COMPLEX_ARGB,
         Map.ofEntries(
             Map.entry(UVFace.NORTH, new UVPos(44, 26 + 16)),
             Map.entry(UVFace.SOUTH, new UVPos(51, 26 + 16)),
@@ -486,17 +485,17 @@ public final class TestPlugin extends JavaPlugin {
         var data = model.write(image);
         var item = new ItemStack(Items.DIAMOND);
         item.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(
-            Collections.emptyList(),
+            data.floats(),
             data.flags(),
             Collections.emptyList(),
             data.colors()
         ));
-        item.set(DataComponents.ITEM_MODEL, ResourceLocation.parse(model.itemModelNamespace()));
+        item.set(DataComponents.ITEM_MODEL, Identifier.parse(model.itemModelNamespace()));
         modelData.add(CraftItemStack.asBukkitCopy(item));
     }
 
     private void writeModel(@NotNull UVModel model, @NotNull File dir) {
-        model.asJson("one_pixel")
+        model.asJson()
             .parallelStream()
             .forEach(builder -> writeAs(builder, dir));
     }
@@ -533,12 +532,12 @@ public final class TestPlugin extends JavaPlugin {
         writeModel(LEFT_FOREARM, dir);
         writeModel(RIGHT_ARM, dir);
         writeModel(RIGHT_FOREARM, dir);
-        writeAs(UVByteBuilder.emptyImage(UV_NAMESPACE, "one_pixel"), dir);
+        writeAs(UVTextureName.DEFAULT.normalPixel(UV_NAMESPACE), dir);
+        writeAs(UVTextureName.DEFAULT.translucentPixel(UV_NAMESPACE), dir);
         try (
-            var stream = Objects.requireNonNull(getResource("test_skin.png"));
-            var buffered = new BufferedInputStream(stream)
+            var stream = Objects.requireNonNull(getResource("test_skin.png"))
         ) {
-            var image = ImageIO.read(buffered);
+            var image = ImageIO.read(stream);
             addData(HEAD, image);
             addData(CHEST, image);
             addData(WAIST, image);

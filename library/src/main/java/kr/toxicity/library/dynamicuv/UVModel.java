@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Represents a UV model.
+ */
 @RequiredArgsConstructor
 public final class UVModel {
 
@@ -20,52 +23,123 @@ public final class UVModel {
     private final List<UVElement> elements = new ArrayList<>();
     private @Nullable String packName;
 
+    /**
+     * Creates a new UV model.
+     *
+     * @param namespace the namespace of the model
+     * @param modelName the name of the model
+     */
     public UVModel(@NotNull UVNamespace namespace, @NotNull String modelName) {
         this(() -> namespace, modelName);
     }
 
+    /**
+     * Adds an element to the model.
+     *
+     * @param element the element to add
+     * @return the model
+     */
     public @NotNull UVModel addElement(@NotNull UVElement element) {
         elements.add(element);
         return this;
     }
 
+    /**
+     * Gets the item model namespace.
+     *
+     * @return the item model namespace
+     */
     public @NotNull String itemModelNamespace() {
         return namespace.get().asset(packName());
     }
 
+    /**
+     * Gets the model name.
+     *
+     * @return the model name
+     */
     public @NotNull String modelName() {
         return modelName;
     }
 
+    /**
+     * Gets the pack name.
+     *
+     * @return the pack name
+     */
     public @NotNull String packName() {
         return packName != null ? packName : modelName;
     }
 
+    /**
+     * Sets the pack name.
+     *
+     * @param packName the pack name
+     */
     public void packName(@Nullable String packName) {
         this.packName = packName;
     }
 
-    public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName) {
+    /**
+     * Converts the model to a list of UVByteBuilders as JSON.
+     *
+     * @return the list of UVByteBuilders
+     */
+    public @NotNull List<UVByteBuilder> asJson() {
+        return asJson(UVTextureName.DEFAULT);
+    }
+
+    /**
+     * Converts the model to a list of UVByteBuilders as JSON.
+     *
+     * @param textureName the texture name
+     * @return the list of UVByteBuilders
+     */
+    public @NotNull List<UVByteBuilder> asJson(@NotNull UVTextureName textureName) {
         return asJson(textureName, i -> modelName + "_" + i);
     }
 
-    public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName, @NotNull UVIndexFunction indexFunction) {
-        return asJson(textureName, new UVLoadContext(indexFunction, ((indexer, namespace1, jsonArray) -> {})));
+    /**
+     * Converts the model to a list of UVByteBuilders as JSON.
+     *
+     * @param textureName the texture name
+     * @param indexFunction the index function
+     * @return the list of UVByteBuilders
+     */
+    public @NotNull List<UVByteBuilder> asJson(@NotNull UVTextureName textureName, @NotNull UVIndexFunction indexFunction) {
+        return asJson(new UVLoadContext(textureName, indexFunction, ((indexer, namespace1, jsonArray) -> {})));
     }
-    public @NotNull List<UVByteBuilder> asJson(@NotNull String textureName, @NotNull UVLoadContext context) {
+
+    /**
+     * Converts the model to a list of UVByteBuilders as JSON.
+     *
+     * @param builder the load context builder
+     * @return the list of UVByteBuilders
+     */
+    public @NotNull List<UVByteBuilder> asJson(@NotNull UVLoadContext.Builder builder) {
+        return asJson(builder.build());
+    }
+
+    /**
+     * Converts the model to a list of UVByteBuilders as JSON.
+     *
+     * @param context the load context
+     * @return the list of UVByteBuilders
+     */
+    public @NotNull List<UVByteBuilder> asJson(@NotNull UVLoadContext context) {
         var indexer = new UVIndexer();
         var builderList = new ArrayList<UVByteBuilder>();
         var composite = new JsonArray();
         var nSpace = namespace.get();
         context.buildFunction().build(indexer, nSpace, composite);
-        var texture = nSpace.textureAssets(textureName);
+        var texture = nSpace.toTextureAssets(context.textureName());
         for (UVElement element : elements) {
             var modelJson = element.pack(context.indexFunction(), texture, indexer);
             for (JsonObject jsonObject : element.asJson(nSpace, indexer, modelJson)) {
                 composite.add(jsonObject);
             }
             for (ModelJson json : modelJson) {
-                builderList.add(json.builder(nSpace));
+                builderList.add(json.asBuilder(nSpace));
             }
         }
         var model = new JsonObject();
@@ -77,10 +151,23 @@ public final class UVModel {
         return builderList;
     }
 
+    /**
+     * Writes the model to a UVModelData object.
+     *
+     * @param image the image to write to
+     * @return the UVModelData object
+     */
     public @NotNull UVModelData write(@NotNull BufferedImage image) {
         return write(image, builder -> {});
     }
 
+    /**
+     * Writes the model to a UVModelData object.
+     *
+     * @param image the image to write to
+     * @param consumer the consumer to configure the builder
+     * @return the UVModelData object
+     */
     public @NotNull UVModelData write(@NotNull BufferedImage image, @NotNull Consumer<UVModelData.Builder> consumer) {
         var builder = UVModelData.builder();
         consumer.accept(builder);

@@ -4,11 +4,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents a mapped face in UV coordinates.
+ *
+ * @param face the UV face
+ * @param position the position vector
+ * @param pixel the pixel vector
+ */
 public record UVMappedFace(
     @NotNull UVFace face,
     @NotNull ElementVector position,
     @NotNull ElementVector pixel
 ) {
+
     private static final JsonArray MAX_UV = new JsonArray(4);
 
     static {
@@ -18,6 +26,12 @@ public record UVMappedFace(
         MAX_UV.add(16);
     }
 
+    /**
+     * Converts the mapped face to a JSON object.
+     *
+     * @param index the tint index
+     * @return the JSON object
+     */
     public @NotNull JsonObject asJson(int index) {
         var next = position.plus(face.mapVector(pixel));
 
@@ -34,6 +48,12 @@ public record UVMappedFace(
         return obj;
     }
 
+    /**
+     * Converts the mapped face to a JSON object with a texture name.
+     *
+     * @param textureName the texture name
+     * @return the JSON object
+     */
     public @NotNull JsonObject asJson(@NotNull String textureName) {
         var elements = new JsonArray(1);
         elements.add(asJson(0));

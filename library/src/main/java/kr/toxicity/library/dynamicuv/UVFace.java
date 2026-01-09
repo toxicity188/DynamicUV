@@ -6,8 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Represents the faces of a UV element.
+ */
 @RequiredArgsConstructor
 public enum UVFace {
+    /**
+     * The north face.
+     */
     NORTH("north", ElementVector::xy, UVSpace::posXY) {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
@@ -25,6 +31,9 @@ public enum UVFace {
             );
         }
     },
+    /**
+     * The south face.
+     */
     SOUTH("south", ElementVector::xy, UVSpace::posXY) {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
@@ -42,6 +51,9 @@ public enum UVFace {
             );
         }
     },
+    /**
+     * The east face.
+     */
     EAST("east", ElementVector::zy, UVSpace::posZY) {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
@@ -59,6 +71,9 @@ public enum UVFace {
             );
         }
     },
+    /**
+     * The west face.
+     */
     WEST("west", ElementVector::zy, UVSpace::posZY) {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
@@ -76,6 +91,9 @@ public enum UVFace {
             );
         }
     },
+    /**
+     * The up face.
+     */
     UP("up", ElementVector::xz, UVSpace::posXZ) {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
@@ -93,6 +111,9 @@ public enum UVFace {
                 ));
         }
     },
+    /**
+     * The down face.
+     */
     DOWN("down", ElementVector::xz, UVSpace::posXZ) {
         @Override
         public void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face) {
@@ -115,17 +136,40 @@ public enum UVFace {
     private final Function<ElementVector, ElementVector> vectorMapper;
     private final Function<UVSpace, UVPos> posMapper;
 
+    /**
+     * Maps the given vector according to the face's orientation.
+     *
+     * @param vector the vector to map
+     * @return the mapped vector
+     */
     public @NotNull ElementVector mapVector(@NotNull ElementVector vector) {
         return vectorMapper.apply(vector);
     }
 
+    /**
+     * Gets the UV position for the given space according to the face's orientation.
+     *
+     * @param space the UV space
+     * @return the UV position
+     */
     public @NotNull UVPos posOf(@NotNull UVSpace space) {
         return posMapper.apply(space);
     }
 
+    /**
+     * Gets the name of the UV face.
+     *
+     * @return the UV face name
+     */
     public @NotNull String uvName() {
         return uvName;
     }
 
+    /**
+     * Iterates over the mapped faces for the given element.
+     *
+     * @param element the UV element
+     * @param face the consumer to accept each mapped face
+     */
     public abstract void iterate(@NotNull UVElement element, @NotNull Consumer<UVMappedFace> face);
 }
