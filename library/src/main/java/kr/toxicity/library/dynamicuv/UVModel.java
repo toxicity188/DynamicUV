@@ -113,16 +113,6 @@ public final class UVModel {
     /**
      * Converts the model to a list of UVByteBuilders as JSON.
      *
-     * @param builder the load context builder
-     * @return the list of UVByteBuilders
-     */
-    public @NotNull List<UVByteBuilder> asJson(@NotNull UVLoadContext.Builder builder) {
-        return asJson(builder.build());
-    }
-
-    /**
-     * Converts the model to a list of UVByteBuilders as JSON.
-     *
      * @param context the load context
      * @return the list of UVByteBuilders
      */
