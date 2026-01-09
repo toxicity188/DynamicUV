@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+
 /**
  * Represents a mapped face in UV coordinates.
  *
@@ -26,13 +28,22 @@ public record UVMappedFace(
         MAX_UV.add(16);
     }
 
-    /**
-     * Converts the mapped face to a JSON object.
-     *
-     * @param index the tint index
-     * @return the JSON object
-     */
-    public @NotNull JsonObject asJson(int index) {
+    static @NotNull JsonArray compositedJson(@NotNull Collection<UVMappedFace> faces) {
+        var array = new JsonArray(faces.size());
+        var i = 0;
+        for (UVMappedFace face : faces) {
+            array.add(face.asJson(i++));
+        }
+        return array;
+    }
+
+    @NotNull JsonArray asJson() {
+        var elements = new JsonArray(1);
+        elements.add(asJson(0));
+        return elements;
+    }
+
+    private @NotNull JsonObject asJson(int index) {
         var next = position.plus(face.mapVector(pixel));
 
         var obj = new JsonObject();
@@ -46,17 +57,5 @@ public record UVMappedFace(
         faces.add(face.uvName(), uv);
         obj.add("faces", faces);
         return obj;
-    }
-
-    /**
-     * Converts the mapped face to a JSON object with a texture name.
-     *
-     * @param textureName the texture name
-     * @return the JSON object
-     */
-    public @NotNull JsonObject asJson(@NotNull String textureName) {
-        var elements = new JsonArray(1);
-        elements.add(asJson(0));
-        return UVUtil.packModel(textureName, elements);
     }
 }

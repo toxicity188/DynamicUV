@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Represents a UV element.
@@ -109,13 +108,6 @@ public final class UVElement {
         return to;
     }
 
-
-    void write(@NotNull UVModelData.Builder builder, @NotNull BufferedImage image) {
-        for (Map.Entry<UVFace, UVPos> entry : mappingPos.entrySet()) {
-            entry.getValue().iterate(entry.getKey().posOf(space), (x, z) -> colorType.write(builder, x < image.getWidth() && z < image.getHeight() ? image.getRGB(x, z) : 0));
-        }
-    }
-
     /**
      * Converts the element to a JSON object.
      *
@@ -123,25 +115,17 @@ public final class UVElement {
      * @return the JSON object
      */
     public @NotNull JsonObject asJson(@NotNull String textureName) {
-        var obj = new JsonObject();
-        var textures = new JsonObject();
-        textures.addProperty("0", textureName);
-        textures.addProperty("particle", textureName);
-        obj.add("textures", textures);
-        var elements = new JsonArray(faces.size());
-        for (UVMappedFace face : faces) {
-            elements.add(face.asJson(0));
+        return UVUtil.packModel(textureName, UVMappedFace.compositedJson(faces));
+    }
+
+    void write(@NotNull UVModelData.Builder builder, @NotNull BufferedImage image) {
+        for (Map.Entry<UVFace, UVPos> entry : mappingPos.entrySet()) {
+            entry.getValue().iterate(entry.getKey().posOf(space), (x, z) -> colorType.buildModelData(builder, x < image.getWidth() && z < image.getHeight() ? image.getRGB(x, z) : 0));
         }
-        obj.add("elements", elements);
-        return obj;
     }
 
-    @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
-        return colorType.asJson(namespace, indexer, modelJsons);
-    }
-
-    @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull UVTextureName textureName, @NotNull UVIndexer indexer) {
-        return colorType.pack(indexFunction, textureName, indexer, faces);
+    void buildJson(@NotNull UVModel.BuildContext context) {
+        colorType.buildJson(context, faces);
     }
 
     /**
@@ -153,25 +137,13 @@ public final class UVElement {
          */
         RGB {
             @Override
-            void write(UVModelData.@NotNull Builder builder, int value) {
+            void buildModelData(UVModelData.@NotNull Builder builder, int value) {
                 builder.colors().add(UVUtil.rgb(value));
             }
 
             @Override
-            @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
-                return modelJsons.stream()
-                    .map(json -> json.asModelJson(namespace, indexer))
-                    .toList();
-            }
-
-            @Override
-            @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull UVTextureName textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
-                var array = new JsonArray(faces.size());
-                var i = 0;
-                for (UVMappedFace face : faces) {
-                    array.add(face.asJson(i++));
-                }
-                return Collections.singletonList(new ModelJson(indexFunction.indexing(indexer.model()), UVUtil.packModel(textureName.normalPixel(), array), faces.size()));
+            void buildJson(@NotNull UVModel.BuildContext context, @NotNull List<UVMappedFace> faces) {
+                context.addToComposite(context.newModel(context.textureName.normalPixel(), UVMappedFace.compositedJson(faces)));
             }
         },
         /**
@@ -179,32 +151,22 @@ public final class UVElement {
          */
         ARGB {
             @Override
-            void write(UVModelData.@NotNull Builder builder, int value) {
+            void buildModelData(UVModelData.@NotNull Builder builder, int value) {
                 builder.colors().add(UVUtil.rgb(value));
                 builder.flags().add(UVUtil.alpha(value) > 0);
             }
 
             @Override
-            @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
-                return modelJsons.stream()
-                    .map(json -> json.asModelJson(namespace, indexer))
-                    .map(rgb -> {
-                        var obj = new JsonObject();
-                        obj.addProperty("type", "minecraft:condition");
-                        obj.addProperty("property", "minecraft:custom_model_data");
-                        obj.addProperty("index", indexer.flag());
-                        obj.add("on_true", rgb);
-                        obj.add("on_false", EMPTY);
-                        return obj;
-                    })
-                    .toList();
-            }
-
-            @Override
-            @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull UVTextureName textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
-                return faces.stream()
-                    .map(face -> new ModelJson(indexFunction.indexing(indexer.model()), face.asJson(textureName.normalPixel()), 1))
-                    .toList();
+            void buildJson(@NotNull UVModel.BuildContext context, @NotNull List<UVMappedFace> faces) {
+                for (UVMappedFace face : faces) {
+                    var obj = new JsonObject();
+                    obj.addProperty("type", "minecraft:condition");
+                    obj.addProperty("property", "minecraft:custom_model_data");
+                    obj.addProperty("index", context.indexer.flag());
+                    obj.add("on_true", context.newModel(context.textureName.normalPixel(), face.asJson()));
+                    obj.add("on_false", EMPTY);
+                    context.addToComposite(obj);
+                }
             }
         },
         /**
@@ -212,39 +174,28 @@ public final class UVElement {
          */
         COMPLEX_ARGB {
             @Override
-            void write(UVModelData.@NotNull Builder builder, int value) {
+            void buildModelData(UVModelData.@NotNull Builder builder, int value) {
                 builder.colors().add(UVUtil.rgb(value));
                 builder.floats().add(Math.round((float) UVUtil.alpha(value) / 255F * 2F));
             }
 
             @Override
-            @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
-                var newArray = new JsonObject[modelJsons.size() / 2];
-                var i = 0;
-                while (i < newArray.length) {
+            void buildJson(@NotNull UVModel.BuildContext context, @NotNull List<UVMappedFace> faces) {
+                for (UVMappedFace face : faces) {
                     var obj = new JsonObject();
                     obj.addProperty("type", "minecraft:range_dispatch");
                     obj.addProperty("property", "minecraft:custom_model_data");
-                    obj.addProperty("index", indexer.floats());
+                    obj.addProperty("index", context.indexer.floats());
                     obj.add("fallback", EMPTY);
                     var entries = new JsonArray(2);
-                    entries.add(entry(1, modelJsons.get(i * 2).asModelJson(namespace, indexer)));
-                    indexer.shiftColor(-1);
-                    entries.add(entry(2, modelJsons.get(i * 2 + 1).asModelJson(namespace, indexer)));
-                    obj.add("entries", entries);
-                    newArray[i++] = obj;
-                }
-                return List.of(newArray);
-            }
 
-            @Override
-            @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull UVTextureName textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
-                return faces.stream()
-                    .flatMap(face -> Stream.of(
-                        new ModelJson(indexFunction.indexing(indexer.model()), face.asJson(textureName.translucentPixel()), 1),
-                        new ModelJson(indexFunction.indexing(indexer.model()), face.asJson(textureName.normalPixel()), 1)
-                    ))
-                    .toList();
+                    entries.add(entry(1, context.newModel(context.textureName.translucentPixel(), face.asJson())));
+                    context.indexer.shiftColor(-1);
+                    entries.add(entry(2, context.newModel(context.textureName.normalPixel(), face.asJson())));
+                    obj.add("entries", entries);
+
+                    context.addToComposite(obj);
+                }
             }
 
             private static @NotNull JsonObject entry(int threshold, @NotNull JsonObject model) {
@@ -262,10 +213,8 @@ public final class UVElement {
             EMPTY.addProperty("type", "minecraft:empty");
         }
 
-        abstract void write(@NotNull UVModelData.Builder builder, int value);
+        abstract void buildModelData(@NotNull UVModelData.Builder builder, int value);
 
-        abstract @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons);
-
-        abstract @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull UVTextureName textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces);
+        abstract void buildJson(@NotNull UVModel.BuildContext context, @NotNull List<UVMappedFace> faces);
     }
 }

@@ -117,28 +117,66 @@ public final class UVModel {
      * @return the list of UVByteBuilders
      */
     public @NotNull List<UVByteBuilder> asJson(@NotNull UVLoadContext context) {
-        var indexer = new UVIndexer();
-        var builderList = new ArrayList<UVByteBuilder>();
-        var composite = new JsonArray();
-        var nSpace = namespace.get();
-        context.buildFunction().build(indexer, nSpace, composite);
-        var texture = nSpace.toTextureAssets(context.textureName());
+        var buildContext = new BuildContext(namespace.get(), context);
         for (UVElement element : elements) {
-            var modelJson = element.pack(context.indexFunction(), texture, indexer);
-            for (JsonObject jsonObject : element.asJson(nSpace, indexer, modelJson)) {
-                composite.add(jsonObject);
-            }
-            for (ModelJson json : modelJson) {
-                builderList.add(json.asBuilder(nSpace));
-            }
+            element.buildJson(buildContext);
         }
         var model = new JsonObject();
         model.addProperty("type", "minecraft:composite");
-        model.add("models", composite);
+        model.add("models", buildContext.composite);
         var obj = new JsonObject();
         obj.add("model", model);
-        builderList.add(UVByteBuilder.of(nSpace.item(packName()), builderList.stream().mapToLong(UVByteBuilder::estimatedSize).sum(), obj));
-        return builderList;
+        buildContext.builders.add(UVByteBuilder.of(
+            buildContext.namespace.item(packName()),
+            buildContext.builders.stream().mapToLong(UVByteBuilder::estimatedSize).sum(),
+            obj
+        ));
+        return buildContext.builders;
+    }
+
+    @RequiredArgsConstructor
+    static final class BuildContext {
+
+        final UVNamespace namespace;
+        final UVTextureName textureName;
+        final UVIndexer indexer = new UVIndexer();
+        private final UVIndexFunction indexFunction;
+        private final List<UVByteBuilder> builders = new ArrayList<>();
+        private final JsonArray composite = new JsonArray();
+
+        BuildContext(@NotNull UVNamespace namespace, @NotNull UVLoadContext context) {
+            this.namespace = namespace;
+            this.indexFunction = context.indexFunction();
+            this.textureName = namespace.toTextureAssets(context.textureName());
+            context.buildFunction().build(indexer, namespace, composite);
+        }
+
+        @NotNull JsonObject newModel(@NotNull String texture, @NotNull JsonArray array) {
+            var name = indexFunction.indexing(indexer.model());
+            var elements = array.size();
+            builders.add(UVByteBuilder.of(namespace.model(name), elements * 256L, UVUtil.packModel(texture, array)));
+            return asModelJson(name, elements);
+        }
+
+        void addToComposite(@NotNull JsonObject object) {
+            composite.add(object);
+        }
+
+        private @NotNull JsonObject asModelJson(@NotNull String name, int elements) {
+            var obj = new JsonObject();
+            obj.addProperty("type", "model");
+            obj.addProperty("model", namespace.asset(name));
+            var tints = new JsonArray(elements);
+            for (int i = 0; i < elements; i++) {
+                var tint = new JsonObject();
+                tint.addProperty("type", "minecraft:custom_model_data");
+                tint.addProperty("index", indexer.color());
+                tint.addProperty("default", 0);
+                tints.add(tint);
+            }
+            obj.add("tints", tints);
+            return obj;
+        }
     }
 
     /**
