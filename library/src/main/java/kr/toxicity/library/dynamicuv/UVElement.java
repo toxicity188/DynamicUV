@@ -18,11 +18,11 @@ public final class UVElement {
     private final List<UVMappedFace> faces;
 
     public UVElement(
-            @NotNull ElementVector scale,
-            @NotNull ElementVector position,
-            @NotNull UVSpace space,
-            @NotNull ColorType colorType,
-            @NotNull Map<UVFace, UVPos> mappingPos
+        @NotNull ElementVector scale,
+        @NotNull ElementVector position,
+        @NotNull UVSpace space,
+        @NotNull ColorType colorType,
+        @NotNull Map<UVFace, UVPos> mappingPos
     ) {
         var center = scale.toModelLocation();
         this.space = space;
@@ -35,8 +35,8 @@ public final class UVElement {
         var list = new ArrayList<UVMappedFace>();
         for (UVFace value : this.mappingPos.keySet()) {
             value.iterate(
-                    this,
-                    list::add
+                this,
+                list::add
             );
         }
         faces = Collections.unmodifiableList(list);
@@ -114,8 +114,8 @@ public final class UVElement {
             @Override
             @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
                 return modelJsons.stream()
-                        .map(json -> UVUtil.model(namespace, json.name(), indexer, json.elements()))
-                        .toList();
+                    .map(json -> UVUtil.model(namespace, json.name(), indexer, json.elements()))
+                    .toList();
             }
         },
         ARGB {
@@ -134,24 +134,24 @@ public final class UVElement {
             @Override
             @NotNull List<JsonObject> asJson(@NotNull UVNamespace namespace, @NotNull UVIndexer indexer, @NotNull List<ModelJson> modelJsons) {
                 return modelJsons.stream()
-                        .map(json -> UVUtil.model(namespace, json.name(), indexer, json.elements()))
-                        .map(rgb -> {
-                            var obj = new JsonObject();
-                            obj.addProperty("type", "minecraft:condition");
-                            obj.addProperty("property", "minecraft:custom_model_data");
-                            obj.addProperty("index", indexer.flag());
-                            obj.add("on_true", rgb);
-                            obj.add("on_false", EMPTY);
-                            return obj;
-                        })
-                        .toList();
+                    .map(json -> UVUtil.model(namespace, json.name(), indexer, json.elements()))
+                    .map(rgb -> {
+                        var obj = new JsonObject();
+                        obj.addProperty("type", "minecraft:condition");
+                        obj.addProperty("property", "minecraft:custom_model_data");
+                        obj.addProperty("index", indexer.flag());
+                        obj.add("on_true", rgb);
+                        obj.add("on_false", EMPTY);
+                        return obj;
+                    })
+                    .toList();
             }
 
             @Override
             @NotNull List<ModelJson> pack(@NotNull UVIndexFunction indexFunction, @NotNull String textureName, @NotNull UVIndexer indexer, @NotNull List<UVMappedFace> faces) {
                 return faces.stream()
-                        .map(face -> new ModelJson(indexFunction.indexing(indexer.model()), face.asJson(textureName), 1))
-                        .toList();
+                    .map(face -> new ModelJson(indexFunction.indexing(indexer.model()), face.asJson(textureName), 1))
+                    .toList();
             }
         }
         ;

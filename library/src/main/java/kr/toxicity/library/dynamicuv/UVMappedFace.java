@@ -5,9 +5,9 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 public record UVMappedFace(
-        @NotNull UVFace face,
-        @NotNull ElementVector position,
-        @NotNull ElementVector pixel
+    @NotNull UVFace face,
+    @NotNull ElementVector position,
+    @NotNull ElementVector pixel
 ) {
     private static final JsonArray MAX_UV = new JsonArray(4);
 

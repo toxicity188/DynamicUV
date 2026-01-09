@@ -14,8 +14,8 @@ import java.util.function.Supplier;
 public interface UVByteBuilder {
 
     Gson GSON = new GsonBuilder()
-            .disableHtmlEscaping()
-            .create();
+        .disableHtmlEscaping()
+        .create();
 
     @NotNull String path();
     byte[] build();
@@ -32,7 +32,7 @@ public interface UVByteBuilder {
     static @NotNull UVByteBuilder of(@NotNull String path, @NotNull BufferedImage image) {
         return of(path, 4L * image.getHeight() * image.getWidth(), () -> {
             try (
-                    var bytes = new ByteArrayOutputStream()
+                var bytes = new ByteArrayOutputStream()
             ) {
                 ImageIO.write(image, "png", bytes);
                 return bytes.toByteArray();

@@ -8,31 +8,35 @@ import it.unimi.dsi.fastutil.ints.IntImmutableList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.jetbrains.annotations.NotNull;
 
-public record UVModelData(@NotNull BooleanList flags, @NotNull IntList colors) {
+public record UVModelData(
+    @NotNull BooleanList flags,
+    @NotNull IntList colors
+) {
 
     public static @NotNull Builder builder() {
         return new Builder();
     }
 
     public static final class Builder {
-        private final BooleanArrayList flags = new BooleanArrayList();
-        private final IntArrayList colors = new IntArrayList();
+
+        private final BooleanList flags = new BooleanArrayList();
+        private final IntList colors = new IntArrayList();
 
         private Builder() {
         }
 
-        public @NotNull BooleanArrayList flags() {
+        public @NotNull BooleanList flags() {
             return flags;
         }
 
-        public @NotNull IntArrayList colors() {
+        public @NotNull IntList colors() {
             return colors;
         }
 
         public @NotNull UVModelData build() {
             return new UVModelData(
-                    BooleanImmutableList.of(flags.toArray(new boolean[0])),
-                    IntImmutableList.of(colors.toArray(new int[0]))
+                new BooleanImmutableList(flags),
+                new IntImmutableList(colors)
             );
         }
     }
