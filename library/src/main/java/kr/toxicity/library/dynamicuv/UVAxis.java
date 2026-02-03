@@ -2,6 +2,8 @@ package kr.toxicity.library.dynamicuv;
 
 import org.jetbrains.annotations.NotNull;
 
+import static java.lang.Math.fma;
+
 /**
  * Represents the axes for UV mapping iteration.
  */
@@ -12,14 +14,14 @@ public enum UVAxis {
     XZ {
         @Override
         public void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
-            var xi = from.x();
+            var xf = from.x();
+            var zf = from.z();
+            var xd = div.x();
+            var zd = div.z();
             for (int x = 0; x < space.x(); x++) {
-                var zi = from.z();
                 for (int z = 0; z < space.z(); z++) {
-                    consumer.consume(xi, zi);
-                    zi += div.z();
+                    consumer.consume(fma(xd, x, xf), fma(zd, z, zf));
                 }
-                xi += div.x();
             }
         }
     },
@@ -29,14 +31,14 @@ public enum UVAxis {
     XY {
         @Override
         public void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
-            var xi = from.x();
+            var xf = from.x();
+            var yf = from.y();
+            var xd = div.x();
+            var yd = div.y();
             for (int x = 0; x < space.x(); x++) {
-                var yi = from.y();
                 for (int y = 0; y < space.y(); y++) {
-                    consumer.consume(xi, yi);
-                    yi += div.y();
+                    consumer.consume(fma(xd, x, xf), fma(yd, y, yf));
                 }
-                xi += div.x();
             }
         }
     },
@@ -46,14 +48,14 @@ public enum UVAxis {
     ZY {
         @Override
         public void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
-            var zi = from.z();
+            var zf = from.z();
+            var yf = from.y();
+            var zd = div.z();
+            var yd = div.y();
             for (int z = 0; z < space.z(); z++) {
-                var yi = from.y();
                 for (int y = 0; y < space.y(); y++) {
-                    consumer.consume(zi, yi);
-                    yi += div.y();
+                    consumer.consume(fma(zd, z, zf), fma(yd, y, yf));
                 }
-                zi += div.z();
             }
         }
     }
