@@ -11,7 +11,7 @@ import java.util.Arrays;
 /**
  * Utility class for UV operations.
  */
-public final class UVUtil {
+final class UVUtil {
 
     static final BufferedImage NORMAL_PIXEL = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
     static final BufferedImage TRANSLUCENT_PIXEL = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
@@ -31,7 +31,7 @@ public final class UVUtil {
      * @param value the integer value
      * @return the RGB value
      */
-    public static int rgb(int value) {
+    static int rgb(int value) {
         return value & 0xFFFFFF;
     }
 
@@ -41,7 +41,7 @@ public final class UVUtil {
      * @param value the integer value
      * @return the alpha value
      */
-    public static int alpha(int value) {
+    static int alpha(int value) {
         return (value >> 24) & 0xFF;
     }
 
@@ -52,7 +52,7 @@ public final class UVUtil {
      * @param elements the elements of the model
      * @return the packed model as a JSON object
      */
-    public static @NotNull JsonObject packModel(@NotNull String textureName, @NotNull JsonArray elements) {
+    static @NotNull JsonObject packModel(@NotNull String textureName, @NotNull JsonArray elements) {
         var obj = new JsonObject();
         var textures = new JsonObject();
         textures.addProperty("0", textureName);

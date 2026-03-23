@@ -7,13 +7,13 @@ import static java.lang.Math.fma;
 /**
  * Represents the axes for UV mapping iteration.
  */
-public enum UVAxis {
+enum UVAxis {
     /**
      * The XZ plane.
      */
     XZ {
         @Override
-        public void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
+        void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
             var xf = from.x();
             var zf = from.z();
             var xd = div.x();
@@ -30,7 +30,7 @@ public enum UVAxis {
      */
     XY {
         @Override
-        public void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
+        void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
             var xf = from.x();
             var yf = from.y();
             var xd = div.x();
@@ -47,7 +47,7 @@ public enum UVAxis {
      */
     ZY {
         @Override
-        public void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
+        void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer) {
             var zf = from.z();
             var yf = from.y();
             var zd = div.z();
@@ -69,12 +69,12 @@ public enum UVAxis {
      * @param div the division vector
      * @param consumer the consumer to accept the iterated values
      */
-    public abstract void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer);
+    abstract void iterate(@NotNull ElementVector from, @NotNull UVSpace space, @NotNull ElementVector div, LineConsumer consumer);
 
     /**
      * A functional interface for consuming line coordinates.
      */
-    public interface LineConsumer {
+    interface LineConsumer {
         /**
          * Consumes the horizontal and vertical coordinates.
          *
