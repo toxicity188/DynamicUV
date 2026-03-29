@@ -1,25 +1,21 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SourcesJar
 
 plugins {
-    id("com.vanniktech.maven.publish") version "0.34.0"
+    id("com.vanniktech.maven.publish") version "0.36.0"
     signing
 }
 
 val artifactBaseId = rootProject.name.lowercase()
 val artifactVersion = project.version.toString().substringBeforeLast('-')
 
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-
 signing {
     useGpgCmd()
 }
 
 dependencies {
-    implementation("org.jetbrains:annotations:26.0.2")
+    implementation("org.jetbrains:annotations:26.1.0")
     listOf(
         "com.google.code.gson:gson:2.13.2",
         "it.unimi.dsi:fastutil:8.5.18"
@@ -27,7 +23,7 @@ dependencies {
         compileOnly(it)
         testImplementation(it)
     }
-    testImplementation(platform("org.junit:junit-bom:5.13.4"))
+    testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -46,8 +42,8 @@ mavenPublishing  {
     signAllPublications()
     coordinates("io.github.toxicity188", artifactBaseId, artifactVersion)
     configure(JavaLibrary(
-        javadocJar = JavadocJar.None(),
-        sourcesJar = true,
+        javadocJar = JavadocJar.Javadoc(),
+        sourcesJar = SourcesJar.Sources(),
     ))
     pom {
         name = artifactBaseId
