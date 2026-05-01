@@ -3,6 +3,7 @@ import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SourcesJar
 
 plugins {
+    alias(libs.plugins.conventions.standard)
     id("com.vanniktech.maven.publish") version "0.36.0"
     signing
 }
@@ -17,7 +18,7 @@ signing {
 dependencies {
     implementation("org.jetbrains:annotations:26.1.0")
     listOf(
-        "com.google.code.gson:gson:2.13.2",
+        "com.google.code.gson:gson:2.14.0",
         "it.unimi.dsi:fastutil:8.5.18"
     ).forEach {
         compileOnly(it)
@@ -35,6 +36,10 @@ tasks {
     test {
         useJUnitPlatform()
     }
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
 mavenPublishing  {
