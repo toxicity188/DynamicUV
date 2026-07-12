@@ -3,10 +3,10 @@ plugins {
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
     id("xyz.jpenilla.run-paper") version "3.0.2"
     id("xyz.jpenilla.resource-factory-bukkit-convention") version "1.3.1"
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.5.1"
 }
 
-val testVersion = "26.1.2"
+val testVersion = "26.2"
 
 dependencies {
     paperweight.paperDevBundle("$testVersion.build.+")
