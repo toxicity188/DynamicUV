@@ -104,11 +104,11 @@ public enum UVFace {
                 element.space(),
                 pixel,
                 (x, z) -> face.accept(new UVMappedFace(
-                        this,
-                        new ElementVector(x, maxY, z),
-                        pixel
-                    )
-                ));
+                    this,
+                    new ElementVector(x, maxY, z),
+                    pixel
+                ))
+            );
         }
     },
     /**

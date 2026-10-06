@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @param indexFunction the index function
  * @param buildFunction the build function
  */
-@Builder(builderClassName = "Builder")
+@Builder
 public record UVLoadContext(
     @NotNull UVTextureName textureName,
     @NotNull UVIndexFunction indexFunction,
