@@ -1,5 +1,5 @@
 [libraries]
-lombok = "org.projectlombok:lombok:1.18.46"
+lombok = "org.projectlombok:lombok:1.18.48"
 
 [plugins]
 conventions-standard = { id = "conventions-standard" }

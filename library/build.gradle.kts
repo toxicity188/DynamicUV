@@ -4,7 +4,7 @@ import com.vanniktech.maven.publish.SourcesJar
 
 plugins {
     alias(libs.plugins.conventions.standard)
-    id("com.vanniktech.maven.publish") version "0.36.0"
+    id("com.vanniktech.maven.publish") version "0.37.0"
     signing
 }
 
@@ -19,12 +19,12 @@ dependencies {
     implementation("org.jetbrains:annotations:26.1.0")
     listOf(
         "com.google.code.gson:gson:2.14.0",
-        "it.unimi.dsi:fastutil:8.5.18"
+        "it.unimi.dsi:fastutil:8.5.19"
     ).forEach {
         compileOnly(it)
         testImplementation(it)
     }
-    testImplementation(platform("org.junit:junit-bom:6.0.3"))
+    testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
