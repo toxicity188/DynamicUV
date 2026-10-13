@@ -122,7 +122,7 @@ public final class UVModel {
             element.buildJson(buildContext);
         }
         var model = new JsonObject();
-        model.addProperty("type", "minecraft:composite");
+        model.addProperty("type", "composite");
         model.add("models", buildContext.composite);
         var obj = new JsonObject();
         obj.add("model", model);
@@ -169,7 +169,7 @@ public final class UVModel {
             var tints = new JsonArray(elements);
             for (int i = 0; i < elements; i++) {
                 var tint = new JsonObject();
-                tint.addProperty("type", "minecraft:custom_model_data");
+                tint.addProperty("type", "custom_model_data");
                 tint.addProperty("index", indexer.color());
                 tint.addProperty("default", 0);
                 tints.add(tint);

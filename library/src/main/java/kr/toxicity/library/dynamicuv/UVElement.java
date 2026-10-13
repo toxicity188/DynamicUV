@@ -160,8 +160,8 @@ public final class UVElement {
             void buildJson(@NotNull UVModel.BuildContext context, @NotNull List<UVMappedFace> faces) {
                 for (UVMappedFace face : faces) {
                     var obj = new JsonObject();
-                    obj.addProperty("type", "minecraft:condition");
-                    obj.addProperty("property", "minecraft:custom_model_data");
+                    obj.addProperty("type", "condition");
+                    obj.addProperty("property", "custom_model_data");
                     obj.addProperty("index", context.indexer.flag());
                     obj.add("on_true", context.newModel(context.textureName.normalPixel(), face.asJson()));
                     obj.add("on_false", EMPTY);
@@ -183,8 +183,8 @@ public final class UVElement {
             void buildJson(@NotNull UVModel.BuildContext context, @NotNull List<UVMappedFace> faces) {
                 for (UVMappedFace face : faces) {
                     var obj = new JsonObject();
-                    obj.addProperty("type", "minecraft:range_dispatch");
-                    obj.addProperty("property", "minecraft:custom_model_data");
+                    obj.addProperty("type", "range_dispatch");
+                    obj.addProperty("property", "custom_model_data");
                     obj.addProperty("index", context.indexer.floats());
                     obj.add("fallback", EMPTY);
                     var entries = new JsonArray(2);
@@ -210,7 +210,7 @@ public final class UVElement {
         private static final JsonObject EMPTY = new JsonObject();
 
         static {
-            EMPTY.addProperty("type", "minecraft:empty");
+            EMPTY.addProperty("type", "empty");
         }
 
         abstract void buildModelData(@NotNull UVModelData.Builder builder, int value);
