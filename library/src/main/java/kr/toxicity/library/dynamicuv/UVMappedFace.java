@@ -4,6 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.util.Base64;
 import java.util.Collection;
 
 /**
@@ -19,7 +22,9 @@ public record UVMappedFace(
     @NotNull ElementVector pixel
 ) {
 
+    private static final int BUFFER_ALLOC_SIZE = 28;
     private static final JsonArray MAX_UV = new JsonArray(4);
+    private static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 
     static {
         MAX_UV.add(0);
@@ -28,19 +33,23 @@ public record UVMappedFace(
         MAX_UV.add(16);
     }
 
-    static @NotNull JsonArray compositedJson(@NotNull Collection<UVMappedFace> faces) {
+    static @NotNull UVIdentifiedJson compositedJson(@NotNull Collection<UVMappedFace> faces) {
+        var buffer = ByteBuffer.allocate(BUFFER_ALLOC_SIZE * faces.size());
         var array = new JsonArray(faces.size());
         var i = 0;
         for (UVMappedFace face : faces) {
+            face.write(buffer);
             array.add(face.asJson(i++));
         }
-        return array;
+        return new UVIdentifiedJson(identifier(buffer),  array);
     }
 
-    @NotNull JsonArray asJson() {
+    @NotNull UVIdentifiedJson asJson() {
         var elements = new JsonArray(1);
         elements.add(asJson(0));
-        return elements;
+        var buffer = ByteBuffer.allocate(BUFFER_ALLOC_SIZE);
+        write(buffer);
+        return new UVIdentifiedJson(identifier(buffer), elements);
     }
 
     private @NotNull JsonObject asJson(int index) {
@@ -57,5 +66,26 @@ public record UVMappedFace(
         faces.add(face.uvName(), uv);
         obj.add("faces", faces);
         return obj;
+    }
+
+    private void write(@NotNull ByteBuffer buffer) {
+        buffer.putInt(face.ordinal());
+        buffer.putFloat(position.x());
+        buffer.putFloat(position.y());
+        buffer.putFloat(position.z());
+        buffer.putFloat(pixel.x());
+        buffer.putFloat(pixel.y());
+        buffer.putFloat(pixel.z());
+    }
+
+    private static @NotNull String identifier(@NotNull ByteBuffer byteBuffer) {
+        try {
+            var digest = MessageDigest.getInstance("MD5");
+            byteBuffer.flip();
+            digest.update(byteBuffer);
+            return ENCODER.encodeToString(digest.digest());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

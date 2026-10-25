@@ -5,19 +5,9 @@ package kr.toxicity.library.dynamicuv;
  */
 public final class UVIndexer {
 
-    private int model;
     private int color;
     private int flag;
     private int floats;
-
-    /**
-     * Gets the next model index.
-     *
-     * @return the next model index
-     */
-    public int model() {
-        return model++;
-    }
 
     /**
      * Gets the next color index.
@@ -44,18 +34,6 @@ public final class UVIndexer {
      */
     public int floats() {
         return floats++;
-    }
-
-    /**
-     * Shifts the model index by the given amount.
-     *
-     * @param shift the amount to shift
-     * @return the previous model index
-     */
-    public int shiftModel(int shift) {
-        var value = model;
-        model += shift;
-        return value;
     }
 
     /**

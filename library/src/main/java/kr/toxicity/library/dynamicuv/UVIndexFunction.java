@@ -7,11 +7,17 @@ import org.jetbrains.annotations.NotNull;
  */
 @FunctionalInterface
 public interface UVIndexFunction {
+
+    /**
+     * Default function
+     */
+    UVIndexFunction DEFAULT = s -> s;
+
     /**
      * Generates an index string for the given index.
      *
-     * @param index the index
+     * @param identifier the identifier
      * @return the index string
      */
-    @NotNull String indexing(int index);
+    @NotNull String indexing(@NotNull String identifier);
 }

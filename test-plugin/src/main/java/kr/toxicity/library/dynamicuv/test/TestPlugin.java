@@ -494,12 +494,6 @@ public final class TestPlugin extends JavaPlugin {
         modelData.add(CraftItemStack.asBukkitCopy(item));
     }
 
-    private void writeModel(@NotNull UVModel model, @NotNull File dir) {
-        model.asJson()
-            .parallelStream()
-            .forEach(builder -> writeAs(builder, dir));
-    }
-
     private void writeAs(@NotNull UVByteBuilder builder, @NotNull File dir) {
         var file = new File(dir, builder.path());
         var parent = file.getParentFile();
@@ -520,18 +514,20 @@ public final class TestPlugin extends JavaPlugin {
         var dir = getDataPath()
             .resolve("build")
             .toFile();
-        writeModel(HEAD, dir);
-        writeModel(CHEST, dir);
-        writeModel(WAIST, dir);
-        writeModel(HIP, dir);
-        writeModel(LEFT_LEG, dir);
-        writeModel(LEFT_FORELEG, dir);
-        writeModel(RIGHT_LEG, dir);
-        writeModel(RIGHT_FORELEG, dir);
-        writeModel(LEFT_ARM, dir);
-        writeModel(LEFT_FOREARM, dir);
-        writeModel(RIGHT_ARM, dir);
-        writeModel(RIGHT_FOREARM, dir);
+        var jsonSet = new HashSet<UVByteBuilder>();
+        jsonSet.addAll(HEAD.asJson());
+        jsonSet.addAll(CHEST.asJson());
+        jsonSet.addAll(WAIST.asJson());
+        jsonSet.addAll(HIP.asJson());
+        jsonSet.addAll(LEFT_LEG.asJson());
+        jsonSet.addAll(LEFT_FORELEG.asJson());
+        jsonSet.addAll(RIGHT_LEG.asJson());
+        jsonSet.addAll(RIGHT_FORELEG.asJson());
+        jsonSet.addAll(LEFT_ARM.asJson());
+        jsonSet.addAll(LEFT_FOREARM.asJson());
+        jsonSet.addAll(RIGHT_ARM.asJson());
+        jsonSet.addAll(RIGHT_FOREARM.asJson());
+        jsonSet.parallelStream().forEach(builder -> writeAs(builder, dir));
         writeAs(UVTextureName.DEFAULT.normalPixel(UV_NAMESPACE), dir);
         writeAs(UVTextureName.DEFAULT.translucentPixel(UV_NAMESPACE), dir);
         try (

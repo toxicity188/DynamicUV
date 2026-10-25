@@ -115,7 +115,7 @@ public final class UVElement {
      * @return the JSON object
      */
     public @NotNull JsonObject asJson(@NotNull String textureName) {
-        return UVUtil.packModel(textureName, UVMappedFace.compositedJson(faces));
+        return UVUtil.packModel(textureName, UVMappedFace.compositedJson(faces).array());
     }
 
     void write(@NotNull UVModelData.Builder builder, @NotNull BufferedImage image) {

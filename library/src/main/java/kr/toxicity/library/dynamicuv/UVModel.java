@@ -96,7 +96,7 @@ public final class UVModel {
      * @return the list of UVByteBuilders
      */
     public @NotNull List<UVByteBuilder> asJson(@NotNull UVTextureName textureName) {
-        return asJson(textureName, i -> modelName + "_" + i);
+        return asJson(textureName, UVIndexFunction.DEFAULT);
     }
 
     /**
@@ -151,8 +151,9 @@ public final class UVModel {
             context.buildFunction().build(indexer, namespace, composite);
         }
 
-        @NotNull JsonObject newModel(@NotNull String texture, @NotNull JsonArray array) {
-            var name = indexFunction.indexing(indexer.model());
+        @NotNull JsonObject newModel(@NotNull String texture, @NotNull UVIdentifiedJson identifiedJson) {
+            var name = indexFunction.indexing(identifiedJson.identifier());
+            var array = identifiedJson.array();
             var elements = array.size();
             builders.add(UVByteBuilder.of(namespace.model(name), elements * 256L, UVUtil.packModel(texture, array)));
             return asModelJson(name, elements);
