@@ -13,36 +13,30 @@ import java.util.function.Supplier;
 
 /**
  * A builder for creating byte arrays for UV assets.
+ * @param path the path
+ * @param estimatedSize the estimated size
  */
-public interface UVByteBuilder {
+public record UVByteBuilder(
+    @NotNull String path,
+    long estimatedSize,
+    @NotNull Supplier<byte[]> supplier
+) {
 
     /**
      * The GSON instance used for JSON serialization.
      */
-    Gson GSON = new GsonBuilder()
+    static final Gson GSON = new GsonBuilder()
         .disableHtmlEscaping()
         .create();
-
-    /**
-     * Gets the path of the asset.
-     *
-     * @return the path
-     */
-    @NotNull String path();
 
     /**
      * Builds the byte array.
      *
      * @return the byte array
      */
-    byte[] build();
-
-    /**
-     * Gets the estimated size of the byte array.
-     *
-     * @return the estimated size
-     */
-    long estimatedSize();
+    public byte[] build() {
+        return supplier.get();
+    }
 
     /**
      * Creates a UVByteBuilder for a normal pixel texture.
@@ -107,21 +101,18 @@ public interface UVByteBuilder {
      * @return the UVByteBuilder
      */
     static @NotNull UVByteBuilder of(@NotNull String path, long estimatedSize, @NotNull Supplier<byte[]> supplier) {
-        return new UVByteBuilder() {
-            @Override
-            public @NotNull String path() {
-                return path;
-            }
+        return new UVByteBuilder(path, estimatedSize, supplier);
+    }
 
-            @Override
-            public byte[] build() {
-                return supplier.get();
-            }
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof UVByteBuilder that)) return false;
 
-            @Override
-            public long estimatedSize() {
-                return estimatedSize;
-            }
-        };
+        return path.equals(that.path);
+    }
+
+    @Override
+    public int hashCode() {
+        return path.hashCode();
     }
 }
