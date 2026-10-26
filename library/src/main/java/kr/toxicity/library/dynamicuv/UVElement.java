@@ -163,7 +163,7 @@ public final class UVElement {
                     obj.addProperty("type", "condition");
                     obj.addProperty("property", "custom_model_data");
                     obj.addProperty("index", context.indexer.flag());
-                    obj.add("on_true", context.newModel(context.textureName.normalPixel(), face.asJson()));
+                    obj.add("on_true", context.newModel(context.textureName.normalPixel(), face.toJson(0)));
                     obj.add("on_false", EMPTY);
                     context.addToComposite(obj);
                 }
@@ -189,9 +189,9 @@ public final class UVElement {
                     obj.add("fallback", EMPTY);
                     var entries = new JsonArray(2);
 
-                    entries.add(entry(1, context.newModel(context.textureName.translucentPixel(), face.asJson())));
+                    entries.add(entry(1, context.newModel(context.textureName.translucentPixel(), face.toJson(1))));
                     context.indexer.shiftColor(-1);
-                    entries.add(entry(2, context.newModel(context.textureName.normalPixel(), face.asJson())));
+                    entries.add(entry(2, context.newModel(context.textureName.normalPixel(), face.toJson(0))));
                     obj.add("entries", entries);
 
                     context.addToComposite(obj);

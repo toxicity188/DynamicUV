@@ -34,25 +34,27 @@ public record UVMappedFace(
     }
 
     static @NotNull UVIdentifiedJson compositedJson(@NotNull Collection<UVMappedFace> faces) {
-        var buffer = ByteBuffer.allocate(BUFFER_ALLOC_SIZE * faces.size());
+        var buffer = ByteBuffer.allocate(4 + BUFFER_ALLOC_SIZE * faces.size());
+        buffer.putInt(0);
         var array = new JsonArray(faces.size());
         var i = 0;
         for (UVMappedFace face : faces) {
             face.write(buffer);
-            array.add(face.asJson(i++));
+            array.add(face.build(i++));
         }
         return new UVIdentifiedJson(identifier(buffer),  array);
     }
 
-    @NotNull UVIdentifiedJson asJson() {
+    @NotNull UVIdentifiedJson toJson(int textureOrdinal) {
         var elements = new JsonArray(1);
-        elements.add(asJson(0));
-        var buffer = ByteBuffer.allocate(BUFFER_ALLOC_SIZE);
+        elements.add(build(0));
+        var buffer = ByteBuffer.allocate(4 + BUFFER_ALLOC_SIZE);
+        buffer.putInt(textureOrdinal);
         write(buffer);
         return new UVIdentifiedJson(identifier(buffer), elements);
     }
 
-    private @NotNull JsonObject asJson(int index) {
+    private @NotNull JsonObject build(int index) {
         var next = position.plus(face.mapVector(pixel));
 
         var obj = new JsonObject();
