@@ -9,7 +9,7 @@ A simple library for Minecraft Java Edition models with in-game configurable tex
 - [DONE] #legacy_78b0 Legacy issue: fix: texture indexing (fixed)
 
 ## Decisions
-- No decisions logged yet.
+- Publish the library from GitHub release events only when the tag equals project_version. Use the complete project_version as the Maven version for both registries. [.github/workflows/release.yml]
 
 ## Notes
 - refactor: cleanup code

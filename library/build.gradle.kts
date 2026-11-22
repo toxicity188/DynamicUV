@@ -1,6 +1,7 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SourcesJar
+import java.util.Base64
 
 plugins {
     alias(libs.plugins.conventions.standard)
@@ -9,10 +10,18 @@ plugins {
 }
 
 val artifactBaseId = rootProject.name.lowercase()
-val artifactVersion = project.version.toString().substringBeforeLast('-')
+val artifactVersion = project.version.toString()
 
 signing {
-    useGpgCmd()
+    val key = providers.environmentVariable("SIGNING_KEY").orNull
+    if (key.isNullOrEmpty()) {
+        useGpgCmd()
+    } else {
+        useInMemoryPgpKeys(
+            Base64.getDecoder().decode(key).toString(Charsets.UTF_8),
+            providers.environmentVariable("SIGNING_PASSWORD").orNull
+        )
+    }
 }
 
 dependencies {
@@ -40,6 +49,19 @@ tasks {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/toxicity188/DynamicUV")
+            credentials {
+                username = providers.environmentVariable("GITHUB_ACTOR").orNull
+                password = providers.environmentVariable("PACKAGES_API_TOKEN").orNull
+            }
+        }
+    }
 }
 
 mavenPublishing  {
