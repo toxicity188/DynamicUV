@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
-import java.util.Base64;
 import java.util.Collection;
 
 /**
@@ -24,7 +24,6 @@ public record UVMappedFace(
 
     private static final int BUFFER_ALLOC_SIZE = 28;
     private static final JsonArray MAX_UV = new JsonArray(4);
-    private static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 
     static {
         MAX_UV.add(0);
@@ -85,7 +84,7 @@ public record UVMappedFace(
             var digest = MessageDigest.getInstance("MD5");
             byteBuffer.flip();
             digest.update(byteBuffer);
-            return ENCODER.encodeToString(digest.digest());
+            return new BigInteger(1, digest.digest()).toString(36);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
