@@ -1,7 +1,7 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SourcesJar
-import java.util.Base64
+import kotlin.io.encoding.Base64
 
 plugins {
     alias(libs.plugins.conventions.standard)
@@ -13,15 +13,16 @@ val artifactBaseId = rootProject.name.lowercase()
 val artifactVersion = project.version.toString()
 
 signing {
-    val key = providers.environmentVariable("SIGNING_KEY").orNull
-    if (key.isNullOrEmpty()) {
-        useGpgCmd()
-    } else {
-        useInMemoryPgpKeys(
-            Base64.getDecoder().decode(key).toString(Charsets.UTF_8),
-            providers.environmentVariable("SIGNING_PASSWORD").orNull
-        )
+    val key = System.getenv("SIGNING_KEY")?.let {
+        Base64.decode(it.toByteArray()).toString(Charsets.UTF_8)
     }
+    val password = System.getenv("SIGNING_PASSWORD")
+    if (!key.isNullOrEmpty() && !password.isNullOrEmpty()) {
+        useInMemoryPgpKeys(
+            key,
+            password
+        )
+    } else useGpgCmd()
 }
 
 dependencies {
